@@ -689,6 +689,11 @@ Value Worker::search(
         if (razor_score <= alpha) {
             return razor_score;
         }
+
+        if (razor_score >= beta + tuned::razor_reduce_margin
+            && depth <= tuned::razor_reduce_depth) {
+            depth = std::max(1, depth - 1);
+        }
     }
 
     // ProbCut (~6 elo)
