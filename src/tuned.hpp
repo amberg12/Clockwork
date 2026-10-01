@@ -56,7 +56,7 @@ namespace Clockwork::tuned {
     TUNE(asp_window_delta, 25, 25, 100, 4, 0.002)                 \
     NO_TUNE(razor_depth, 7, 1, 20, 0.5, 0.002)                    \
     TUNE(razor_margin, 657, 353, 1414, 53, 0.002)                 \
-    TUNE(razor_reduce_margin, 96, 32, 192, 5, 0.002)              \
+    TUNE(razor_reduce_margin, 160, 32, 192, 5, 0.002)             \
     NO_TUNE(razor_reduce_depth, 4, 1, 10, 0.5, 0.002)             \
     NO_TUNE(lmp_depth_mult, 3, 1, 20, 0.5, 0.002)                 \
                                                                   \
