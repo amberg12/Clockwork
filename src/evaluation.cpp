@@ -271,11 +271,21 @@ std::tuple<PScore, i32> evaluate_pawns(const Position& pos, const EvalData& data
     Bitboard isolated =
       pawns & ~(pawn_files.shift(Direction::East) | pawn_files.shift(Direction::West));
     eval += DOUBLED_PAWN_VAL * doubled.ipopcount();
-    eval += ISOLATED_PAWN_VAL * isolated.ipopcount();
 
     for (Square sq : pawns) {
+        bool     is_isolated = isolated.is_set(sq);
         Square   push     = sq.push<color>();
         Bitboard stoppers = opp_pawns & passed_pawn_spans[static_cast<usize>(color)][sq.raw];
+
+        if (is_isolated) {
+            Bitboard narrow_stoppers = stoppers & Bitboard::file_mask(sq.file());
+
+            eval += ISOLATED_PAWN_VAL;
+            if (narrow_stoppers.any()) {
+                eval += OPPOSED_WEAK_PAWN_VAL;
+            }
+        }
+
         if (stoppers.empty()) {
             ++passers;
 
