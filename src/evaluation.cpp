@@ -274,14 +274,17 @@ std::tuple<PScore, i32> evaluate_pawns(const Position& pos, const EvalData& data
 
     for (Square sq : pawns) {
         bool     is_isolated = isolated.is_set(sq);
-        Square   push     = sq.push<color>();
-        Bitboard stoppers = opp_pawns & passed_pawn_spans[static_cast<usize>(color)][sq.raw];
+        Square   push        = sq.push<color>();
+        Bitboard stoppers    = opp_pawns & passed_pawn_spans[static_cast<usize>(color)][sq.raw];
 
         if (is_isolated) {
             Bitboard narrow_stoppers = stoppers & Bitboard::file_mask(sq.file());
 
             eval += ISOLATED_PAWN_VAL;
-            if (narrow_stoppers.any()) {
+            // No enemy blocker => protection from rook/queens, so require opp rook or opp queens
+            if (narrow_stoppers.any()
+                && (pos.bitboard_for(~color, PieceType::Rook).any()
+                    || pos.bitboard_for(~color, PieceType::Queen).any())) {
                 eval += OPPOSED_WEAK_PAWN_VAL;
             }
         }
